@@ -1,0 +1,44 @@
+name: Deploy Prep Log
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build iPhone icons
+        run: |
+          base64 --decode .github/assets/icon-192.b64 > icons/icon-192.png
+          base64 --decode .github/assets/icon-512.b64 > icons/icon-512.png
+          base64 --decode .github/assets/apple-touch-icon.b64 > icons/apple-touch-icon.png
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
