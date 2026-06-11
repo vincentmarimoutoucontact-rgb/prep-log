@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#101a2e" />
+    <meta name="description" content="Suivi quotidien de préparation bodybuilding, matin et soir." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Prep Log" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Prep Log</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <button class="brand" type="button" data-route="home" aria-label="Retour à l'accueil">
+          <span class="brand-mark" aria-hidden="true">PL</span>
+          <span>
+            <strong>PREP LOG</strong>
+            <small>Vincent Marimoutou</small>
+          </span>
+        </button>
+        <div class="topbar-actions">
+          <span class="sync-pill" id="connection-status">
+            <span class="status-dot"></span>
+            <span>Local</span>
+          </span>
+          <button class="icon-button" id="settings-button" type="button" aria-label="Ouvrir les réglages">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"></path>
+              <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 8.97 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3v-4h.08A1.7 1.7 0 0 0 4.6 8.94a1.7 1.7 0 0 0-.34-1.88L4.2 7l2.83-2.83.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 10 3.01V3h4v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06L19.8 7l-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <main id="app-content" tabindex="-1">
+        <section class="view is-active" id="view-home" data-view="home" aria-labelledby="home-title">
+          <div class="hero">
+            <div>
+              <p class="eyebrow" id="today-label">AUJOURD'HUI</p>
+              <h1 id="home-title">Bonjour Vincent.</h1>
+              <p class="hero-copy">Une saisie courte, des tendances claires.</p>
+            </div>
+            <div class="week-badge">
+              <span>Semaine</span>
+              <strong id="current-week">—</strong>
+            </div>
+          </div>
+
+          <section class="today-card" aria-labelledby="today-progress-title">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">CHECK-IN DU JOUR</p>
+                <h2 id="today-progress-title">Ton suivi</h2>
+              </div>
+              <div class="completion-ring" id="completion-ring" aria-label="Progression du jour">
+                <span id="completion-value">0%</span>
+              </div>
+            </div>
+            <div class="checkin-grid">
+              <button class="checkin-action" type="button" data-route="morning">
+                <span class="checkin-icon sun-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+                  </svg>
+                </span>
+                <span>
+                  <small>MATIN</small>
+                  <strong id="morning-status">À compléter</strong>
+                </span>
+                <span class="action-arrow">›</span>
+              </button>
+              <button class="checkin-action" type="button" data-route="evening">
+                <span class="checkin-icon moon-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"></path>
+                  </svg>
+                </span>
+                <span>
+                  <small>SOIR</small>
+                  <strong id="evening-status">À compléter</strong>
+                </span>
+                <span class="action-arrow">›</span>
+              </button>
+            </div>
+          </section>
+
+          <section aria-labelledby="snapshot-title">
+            <div class="section-heading compact-heading">
+              <div>
+                <p class="eyebrow">CETTE SEMAINE</p>
+                <h2 id="snapshot-title">En un coup d'œil</h2>
+              </div>
+              <button class="text-button" type="button" data-route="history">Voir le détail</button>
+            </div>
+            <div class="metric-grid">
+              <article class="metric-card">
+                <span class="metric-label">Poids moyen</span>
+                <strong><span id="metric-weight">—</span><small> kg</small></strong>
+                <span class="metric-trend" id="metric-weight-trend">Pas assez de données</span>
+              </article>
+              <article class="metric-card">
+                <span class="metric-label">Sommeil</span>
+                <strong><span id="metric-sleep">—</span><small> / 7</small></strong>
+                <span class="metric-trend" id="metric-sleep-trend">Qualité moyenne</span>
+              </article>
+              <article class="metric-card">
+                <span class="metric-label">Pas moyens</span>
+                <strong id="metric-steps">—</strong>
+                <span class="metric-trend" id="metric-steps-trend">Objectif à définir</span>
+              </article>
+              <article class="metric-card">
+                <span class="metric-label">Hydratation</span>
+                <strong><span id="metric-water">—</span><small> L</small></strong>
+                <span class="metric-trend">Moyenne quotidienne</span>
+              </article>
+            </div>
+          </section>
+
+          <section class="chart-card" aria-labelledby="weight-chart-title">
+            <div class="section-heading compact-heading">
+              <div>
+                <p class="eyebrow">TENDANCE</p>
+                <h2 id="weight-chart-title">Poids sur 14 jours</h2>
+              </div>
+              <span class="chart-value" id="chart-latest-weight">—</span>
+            </div>
+            <div class="chart-wrap">
+              <svg id="weight-chart" viewBox="0 0 600 220" role="img" aria-label="Évolution du poids sur 14 jours">
+                <defs>
+                  <linearGradient id="chart-fill" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#f0b44d" stop-opacity=".35"></stop>
+                    <stop offset="100%" stop-color="#f0b44d" stop-opacity="0"></stop>
+                  </linearGradient>
+                </defs>
+                <g id="chart-grid"></g>
+                <path id="weight-area" class="chart-area" d=""></path>
+                <path id="weight-line" class="chart-line" d=""></path>
+                <g id="weight-points"></g>
+                <g id="chart-labels"></g>
+              </svg>
+              <div class="empty-chart" id="empty-chart">
+                <strong>La courbe apparaîtra ici</strong>
+                <span>Ajoute au moins deux mesures de poids.</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="alert-card is-hidden" id="alert-card" aria-live="polite">
+            <span class="alert-icon">!</span>
+            <div>
+              <strong>Un point mérite ton attention</strong>
+              <p id="alert-copy"></p>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="view-morning" data-view="morning" aria-labelledby="morning-title">
+          <div class="page-heading">
+            <button class="back-button" type="button" data-route="home" aria-label="Retour">
+              <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>
+            </button>
+            <div>
+              <p class="eyebrow">CHECK-IN</p>
+              <h1 id="morning-title">Saisie du matin</h1>
+              <p>Poids, sommeil et marqueurs de santé.</p>
+            </div>
+          </div>
+
+          <form class="entry-form" id="morning-form">
+            <section class="form-card">
+              <div class="form-card-heading">
+                <span class="step-number">01</span>
+                <div>
+                  <h2>Repères</h2>
+                  <p>La date du jour est sélectionnée automatiquement.</p>
+                </div>
+              </div>
+              <div class="field-grid two-cols">
+                <label class="field">
+                  <span>Date</span>
+                  <input type="date" name="date" required />
+                </label>
+                <label class="field">
+                  <span>Poids</span>
+                  <span class="input-with-unit">
+                    <input type="number" name="weight" inputmode="decimal" min="30" max="200" step="0.1" placeholder="79,4" />
+                    <span>kg</span>
+                  </span>
+                </label>
+              </div>
+            </section>
+
+            <section class="form-card">
+              <div class="form-card-heading">
+                <span class="step-number">02</span>
+                <div>
+                  <h2>Sommeil</h2>
+                  <p>Les horaires sont facultatifs, la qualité suffit.</p>
+                </div>
+              </div>
+              <div class="field-grid two-cols">
+                <label class="field">
+                  <span>Couché</span>
+                  <input type="time" name="bedtime" />
+                </label>
+                <label class="field">
+                  <span>Levé</span>
+                  <input type="time" name="wakeTime" />
+                </label>
+              </div>
+              <fieldset class="rating-field">
+                <legend>
+                  <span>Qualité du sommeil</span>
+                  <output data-rating-output="sleepQuality">—</output>
+                </legend>
+                <div class="rating-scale" data-rating="sleepQuality"></div>
+                <div class="scale-legend"><span>Très mauvaise</span><span>Parfaite</span></div>
+              </fieldset>
+            </section>
+
+            <section class="form-card">
+              <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="health-fields">
+                <span>
+                  <small>FACULTATIF</small>
+                  <strong>Marqueurs de santé</strong>
+                </span>
+                <span class="accordion-chevron">⌄</span>
+              </button>
+              <div class="accordion-content" id="health-fields" hidden>
+                <div class="field-grid">
+                  <label class="field">
+                    <span>Tension</span>
+                    <input type="text" name="bloodPressure" inputmode="numeric" placeholder="120/70" />
+                  </label>
+                  <label class="field">
+                    <span>Fréquence cardiaque</span>
+                    <span class="input-with-unit">
+                      <input type="number" name="heartRate" inputmode="numeric" min="30" max="220" placeholder="58" />
+                      <span>bpm</span>
+                    </span>
+                  </label>
+                  <label class="field">
+                    <span>Glycémie</span>
+                    <input type="number" name="bloodGlucose" inputmode="decimal" min="0" step="0.01" placeholder="Valeur" />
+                  </label>
+                </div>
+              </div>
+            </section>
+
+            <button class="primary-button submit-button" type="submit">
+              <span>Enregistrer le matin</span>
+              <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>
+            </button>
+          </form>
+        </section>
+
+        <section class="view" id="view-evening" data-view="evening" aria-labelledby="evening-title">
+          <div class="page-heading">
+            <button class="back-button" type="button" data-route="home" aria-label="Retour">
+              <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>
+            </button>
+            <div>
+              <p class="eyebrow">CHECK-IN</p>
+              <h1 id="evening-title">Saisie du soir</h1>
+              <p>Activité, sensations et état de santé.</p>
+            </div>
+          </div>
+
+          <form class="entry-form" id="evening-form">
+            <section class="form-card">
+              <div class="form-card-heading">
+                <span class="step-number">01</span>
+                <div>
+                  <h2>Journée</h2>
+                  <p>Les éléments objectifs de ta journée.</p>
+                </div>
+              </div>
+              <div class="field-grid two-cols">
+                <label class="field">
+                  <span>Date</span>
+                  <input type="date" name="date" required />
+                </label>
+                <label class="field">
+                  <span>Phase</span>
+                  <select name="phase">
+                    <option value="">Choisir</option>
+                    <option>Growth</option>
+                    <option>Recomp</option>
+                    <option>Préparation</option>
+                    <option>Peak week</option>
+                    <option>Off</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Hydratation</span>
+                  <span class="input-with-unit">
+                    <input type="number" name="hydration" inputmode="decimal" min="0" max="12" step="0.1" placeholder="4,0" />
+                    <span>L</span>
+                  </span>
+                </label>
+                <label class="field">
+                  <span>Caféine</span>
+                  <span class="input-with-unit">
+                    <input type="number" name="caffeine" inputmode="numeric" min="0" max="1500" step="10" placeholder="200" />
+                    <span>mg</span>
+                  </span>
+                </label>
+                <label class="field">
+                  <span>Pas</span>
+                  <input type="number" name="steps" inputmode="numeric" min="0" max="100000" step="100" placeholder="15000" />
+                </label>
+                <label class="field">
+                  <span>Cardio</span>
+                  <input type="text" name="cardio" placeholder="30 min vélo" />
+                </label>
+                <label class="field field-span">
+                  <span>Entraînement</span>
+                  <select name="training">
+                    <option value="">Choisir</option>
+                    <option>Push</option>
+                    <option>Pull</option>
+                    <option>Legs</option>
+                    <option>Upper</option>
+                    <option>Lower</option>
+                    <option>Full body</option>
+                    <option>Cardio</option>
+                    <option>Repos</option>
+                    <option>Autre</option>
+                  </select>
+                </label>
+              </div>
+            </section>
+
+            <section class="form-card">
+              <div class="form-card-heading">
+                <span class="step-number">02</span>
+                <div>
+                  <h2>Sensations</h2>
+                  <p>1 correspond au minimum, 7 au meilleur niveau, sauf courbatures.</p>
+                </div>
+              </div>
+              <div class="ratings-stack" id="evening-ratings"></div>
+            </section>
+
+            <section class="form-card">
+              <div class="form-card-heading">
+                <span class="step-number">03</span>
+                <div>
+                  <h2>Santé et digestion</h2>
+                  <p>Les précisions apparaissent uniquement si nécessaire.</p>
+                </div>
+              </div>
+              <div class="toggle-question">
+                <span>Douleur ou blessure ?</span>
+                <div class="segmented-control" data-segmented="injury">
+                  <button type="button" data-value="Non">Non</button>
+                  <button type="button" data-value="Oui">Oui</button>
+                </div>
+              </div>
+              <label class="field conditional-field" data-condition="injury" hidden>
+                <span>Précise la zone et la gêne</span>
+                <textarea name="injuryDetails" rows="3" placeholder="Ex. gêne à l'épaule droite sur les développés"></textarea>
+              </label>
+              <div class="toggle-question">
+                <span>Malade aujourd'hui ?</span>
+                <div class="segmented-control" data-segmented="sick">
+                  <button type="button" data-value="Non">Non</button>
+                  <button type="button" data-value="Oui">Oui</button>
+                </div>
+              </div>
+              <label class="field conditional-field" data-condition="sick" hidden>
+                <span>Précise les symptômes</span>
+                <textarea name="sickDetails" rows="3" placeholder="Ex. état grippal, fatigue inhabituelle"></textarea>
+              </label>
+              <label class="field">
+                <span>Digestion</span>
+                <select name="digestion">
+                  <option value="">Choisir</option>
+                  <option>Digestif parfait</option>
+                  <option>Ballonnements</option>
+                  <option>Transit lent</option>
+                  <option>Transit rapide</option>
+                  <option>Nausées</option>
+                  <option>Autre</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Autres informations pour le coach</span>
+                <textarea name="notes" rows="4" placeholder="Écart alimentaire, voyage, fatigue, ressenti particulier..."></textarea>
+              </label>
+            </section>
+
+            <button class="primary-button submit-button" type="submit">
+              <span>Enregistrer le soir</span>
+              <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>
+            </button>
+          </form>
+        </section>
+
+        <section class="view" id="view-history" data-view="history" aria-labelledby="history-title">
+          <div class="page-heading history-heading">
+            <div>
+              <p class="eyebrow">JOURNAL</p>
+              <h1 id="history-title">Historique</h1>
+              <p>Retrouve et modifie chaque journée.</p>
+            </div>
+            <button class="secondary-button compact-button" id="export-csv-button" type="button">
+              <svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>
+              Exporter
+            </button>
+          </div>
+
+          <div class="history-toolbar">
+            <label class="search-field">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+              <input type="search" id="history-search" placeholder="Rechercher une note, un entraînement..." />
+            </label>
+            <div class="filter-tabs" role="tablist" aria-label="Filtrer l'historique">
+              <button class="is-active" type="button" data-filter="all">Tout</button>
+              <button type="button" data-filter="complete">Complets</button>
+              <button type="button" data-filter="alerts">Alertes</button>
+            </div>
+          </div>
+
+          <div class="history-summary">
+            <div><span>Journées</span><strong id="history-days">0</strong></div>
+            <div><span>Check-ins</span><strong id="history-checkins">0</strong></div>
+            <div><span>Alertes</span><strong id="history-alerts">0</strong></div>
+          </div>
+
+          <div class="history-list" id="history-list"></div>
+          <div class="empty-state is-hidden" id="history-empty">
+            <span class="empty-state-icon">
+              <svg viewBox="0 0 24 24"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"></path></svg>
+            </span>
+            <h2>Aucune journée trouvée</h2>
+            <p>Commence par enregistrer ta saisie du matin ou du soir.</p>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Navigation principale">
+        <button class="nav-item is-active" type="button" data-route="home">
+          <svg viewBox="0 0 24 24"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3z"></path></svg>
+          <span>Accueil</span>
+        </button>
+        <button class="nav-item" type="button" data-route="morning">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2"></path></svg>
+          <span>Matin</span>
+        </button>
+        <button class="nav-item" type="button" data-route="evening">
+          <svg viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"></path></svg>
+          <span>Soir</span>
+        </button>
+        <button class="nav-item" type="button" data-route="history">
+          <svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"></path></svg>
+          <span>Historique</span>
+        </button>
+      </nav>
+    </div>
+
+    <dialog class="settings-dialog" id="settings-dialog">
+      <form method="dialog" class="dialog-panel" id="settings-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">APPLICATION</p>
+            <h2>Réglages</h2>
+          </div>
+          <button class="icon-button" value="cancel" aria-label="Fermer">
+            <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+        <div class="settings-section">
+          <h3>Profil et objectifs</h3>
+          <div class="field-grid two-cols">
+            <label class="field">
+              <span>Prénom</span>
+              <input type="text" name="firstName" />
+            </label>
+            <label class="field">
+              <span>Coach</span>
+              <input type="text" name="coachName" />
+            </label>
+            <label class="field">
+              <span>Objectif de pas</span>
+              <input type="number" name="stepGoal" min="0" step="500" />
+            </label>
+            <label class="field">
+              <span>Objectif hydratation</span>
+              <span class="input-with-unit">
+                <input type="number" name="hydrationGoal" min="0" step="0.1" />
+                <span>L</span>
+              </span>
+            </label>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Sauvegarde</h3>
+          <p id="storage-status">Initialisation du stockage local...</p>
+          <p>Les données restent sur cet iPhone. Une sauvegarde régulière protège contre la suppression de l’application ou des données Safari.</p>
+          <div class="settings-actions">
+            <button class="secondary-button" id="export-json-button" type="button">Sauvegarder les données</button>
+            <label class="secondary-button file-button">
+              Restaurer une sauvegarde
+              <input type="file" id="import-json-input" accept="application/json" />
+            </label>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Installation</h3>
+          <p>Ajoute Prep Log à ton écran d’accueil pour un affichage plein écran et un stockage plus durable.</p>
+          <button class="secondary-button" id="install-button" type="button" disabled>Installation non disponible</button>
+          <div class="ios-install-instructions" id="ios-install-instructions" hidden>
+            <strong>Sur iPhone avec Safari</strong>
+            <ol>
+              <li>Touche le bouton Partager en bas de Safari.</li>
+              <li>Choisis « Sur l’écran d’accueil ».</li>
+              <li>Touche « Ajouter », puis ouvre Prep Log depuis son icône.</li>
+            </ol>
+          </div>
+        </div>
+        <div class="settings-section danger-zone">
+          <h3>Zone sensible</h3>
+          <button class="danger-button" id="clear-data-button" type="button">Effacer toutes les données</button>
+        </div>
+        <button class="primary-button" value="save">Enregistrer les réglages</button>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>
+      <span id="toast-message">Données enregistrées</span>
+    </div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
