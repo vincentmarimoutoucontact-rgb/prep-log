@@ -1,0 +1,39 @@
+{
+  "name": "Prep Log - Suivi Bodybuilding",
+  "short_name": "Prep Log",
+  "description": "Suivi quotidien matin et soir pour une préparation bodybuilding.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0b1220",
+  "theme_color": "#101a2e",
+  "lang": "fr",
+  "categories": ["health", "fitness", "productivity"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Saisie du matin",
+      "short_name": "Matin",
+      "url": "./#morning"
+    },
+    {
+      "name": "Saisie du soir",
+      "short_name": "Soir",
+      "url": "./#evening"
+    }
+  ]
+}
