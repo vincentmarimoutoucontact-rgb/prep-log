@@ -1,7 +1,7 @@
 {
   "name": "Prep Log - Suivi Bodybuilding",
   "short_name": "Prep Log",
-  "description": "Suivi quotidien matin et soir pour une préparation bodybuilding.",
+  "description": "Suivi quotidien et concepteur de séances pour une préparation bodybuilding.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -34,6 +34,11 @@
       "name": "Saisie du soir",
       "short_name": "Soir",
       "url": "./#evening"
+    },
+    {
+      "name": "Créer une séance",
+      "short_name": "Séance",
+      "url": "./#workout"
     }
   ]
 }
