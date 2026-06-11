@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#101a2e" />
-    <meta name="description" content="Suivi quotidien de préparation bodybuilding, matin et soir." />
+    <meta name="description" content="Suivi quotidien de préparation bodybuilding et concepteur de séances." />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Prep Log" />
@@ -405,6 +405,99 @@
           </form>
         </section>
 
+        <section class="view" id="view-workout" data-view="workout" aria-labelledby="workout-title">
+          <div class="page-heading workout-heading">
+            <button class="back-button" type="button" data-route="home" aria-label="Retour">
+              <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>
+            </button>
+            <div>
+              <p class="eyebrow">CONCEPTEUR</p>
+              <h1 id="workout-title">Séance aléatoire</h1>
+              <p>Une structure cohérente, à adapter aux consignes de ton coach.</p>
+            </div>
+          </div>
+
+          <section class="form-card workout-builder" aria-labelledby="workout-settings-title">
+            <div class="form-card-heading">
+              <span class="step-number">01</span>
+              <div>
+                <h2 id="workout-settings-title">Choisis le cadre</h2>
+                <p>Le tirage respecte la zone travaillée, le matériel et le temps disponible.</p>
+              </div>
+            </div>
+            <div class="field-grid two-cols workout-controls">
+              <label class="field">
+                <span>Zone</span>
+                <select id="workout-focus">
+                  <option value="push">Push</option>
+                  <option value="pull">Pull</option>
+                  <option value="legs">Jambes</option>
+                  <option value="upper">Haut du corps</option>
+                  <option value="lower">Bas du corps</option>
+                  <option value="full">Full body</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Durée</span>
+                <select id="workout-duration">
+                  <option value="35">35 min</option>
+                  <option value="50" selected>50 min</option>
+                  <option value="65">65 min</option>
+                  <option value="80">80 min</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Matériel</span>
+                <select id="workout-equipment">
+                  <option value="gym">Salle complète</option>
+                  <option value="dumbbells">Haltères + banc</option>
+                  <option value="bodyweight">Poids du corps</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Intensité</span>
+                <select id="workout-intensity">
+                  <option value="light">Légère</option>
+                  <option value="standard" selected>Standard</option>
+                  <option value="hard">Intense</option>
+                </select>
+              </label>
+            </div>
+            <button class="primary-button workout-generate-button" id="generate-workout-button" type="button">
+              <svg viewBox="0 0 24 24"><path d="M20 7h-4V3M4 17h4v4M5.5 8.5A7 7 0 0 1 16 5l4 2M18.5 15.5A7 7 0 0 1 8 19l-4-2"></path></svg>
+              Générer ma séance
+            </button>
+          </section>
+
+          <section class="workout-result is-hidden" id="workout-result" aria-live="polite">
+            <div class="workout-summary">
+              <div>
+                <p class="eyebrow">SÉANCE PROPOSÉE</p>
+                <h2 id="generated-workout-title">Push · 50 min</h2>
+                <p id="generated-workout-meta">6 exercices · Intensité standard</p>
+              </div>
+              <button class="icon-button" id="regenerate-workout-button" type="button" aria-label="Générer une autre séance">
+                <svg viewBox="0 0 24 24"><path d="M20 7h-4V3M4 17h4v4M5.5 8.5A7 7 0 0 1 16 5l4 2M18.5 15.5A7 7 0 0 1 8 19l-4-2"></path></svg>
+              </button>
+            </div>
+            <div class="workout-warning is-hidden" id="workout-warning">
+              <strong>Douleur signalée récemment</strong>
+              <span>Reste sur une intensité légère et valide les exercices avec ton coach.</span>
+            </div>
+            <ol class="exercise-list" id="exercise-list"></ol>
+            <div class="workout-actions">
+              <button class="secondary-button" id="discard-workout-button" type="button">Recommencer</button>
+              <button class="primary-button" id="save-workout-button" type="button">
+                <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>
+                <span id="save-workout-label">Enregistrer aujourd’hui</span>
+              </button>
+            </div>
+            <p class="workout-disclaimer">
+              Ne remplace pas le programme de ton préparateur. Arrête un exercice en cas de douleur inhabituelle.
+            </p>
+          </section>
+        </section>
+
         <section class="view" id="view-history" data-view="history" aria-labelledby="history-title">
           <div class="page-heading history-heading">
             <div>
@@ -459,6 +552,10 @@
         <button class="nav-item" type="button" data-route="evening">
           <svg viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"></path></svg>
           <span>Soir</span>
+        </button>
+        <button class="nav-item" type="button" data-route="workout">
+          <svg viewBox="0 0 24 24"><path d="M6 9v6M18 9v6M3 10v4M21 10v4M6 12h12"></path></svg>
+          <span>Séance</span>
         </button>
         <button class="nav-item" type="button" data-route="history">
           <svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"></path></svg>
