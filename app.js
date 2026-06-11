@@ -15,6 +15,73 @@ const eveningRatings = [
   { key: "stress", label: "Stress", low: "Très élevé", high: "Aucun stress" },
 ];
 
+const workoutLabels = {
+  push: "Push",
+  pull: "Pull",
+  legs: "Jambes",
+  upper: "Haut du corps",
+  lower: "Bas du corps",
+  full: "Full body",
+  light: "Légère",
+  standard: "Standard",
+  hard: "Intense",
+  gym: "Salle complète",
+  dumbbells: "Haltères + banc",
+  bodyweight: "Poids du corps",
+};
+
+const exerciseLibrary = [
+  { id: "bench-press", name: "Développé couché barre", focus: ["push", "upper", "full"], equipment: ["gym"], kind: "compound", target: "Pectoraux", reps: "6-10" },
+  { id: "incline-machine", name: "Développé incliné machine", focus: ["push", "upper"], equipment: ["gym"], kind: "compound", target: "Haut de pectoraux", reps: "8-12" },
+  { id: "incline-db", name: "Développé incliné haltères", focus: ["push", "upper", "full"], equipment: ["gym", "dumbbells"], kind: "compound", target: "Haut de pectoraux", reps: "8-12" },
+  { id: "db-press", name: "Développé couché haltères", focus: ["push", "upper", "full"], equipment: ["gym", "dumbbells"], kind: "compound", target: "Pectoraux", reps: "8-12" },
+  { id: "push-ups", name: "Pompes contrôlées", focus: ["push", "upper", "full"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "compound", target: "Pectoraux", reps: "10-20" },
+  { id: "pike-push-ups", name: "Pompes pike", focus: ["push", "upper", "full"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "compound", target: "Épaules", reps: "8-15" },
+  { id: "shoulder-press-machine", name: "Développé épaules machine", focus: ["push", "upper"], equipment: ["gym"], kind: "compound", target: "Épaules", reps: "8-12" },
+  { id: "shoulder-press-db", name: "Développé épaules haltères", focus: ["push", "upper", "full"], equipment: ["gym", "dumbbells"], kind: "compound", target: "Épaules", reps: "8-12" },
+  { id: "cable-fly", name: "Écartés à la poulie", focus: ["push", "upper"], equipment: ["gym"], kind: "isolation", target: "Pectoraux", reps: "12-20" },
+  { id: "db-fly", name: "Écartés haltères", focus: ["push", "upper"], equipment: ["gym", "dumbbells"], kind: "isolation", target: "Pectoraux", reps: "12-15" },
+  { id: "lateral-raise", name: "Élévations latérales", focus: ["push", "upper", "full"], equipment: ["gym", "dumbbells"], kind: "isolation", target: "Deltoïdes", reps: "12-20" },
+  { id: "lateral-bodyweight", name: "Élévations latérales au mur", focus: ["push", "upper"], equipment: ["bodyweight"], kind: "isolation", target: "Deltoïdes", reps: "12-20" },
+  { id: "triceps-pushdown", name: "Extension triceps poulie", focus: ["push", "upper"], equipment: ["gym"], kind: "isolation", target: "Triceps", reps: "10-15" },
+  { id: "triceps-db", name: "Extension triceps haltère", focus: ["push", "upper"], equipment: ["gym", "dumbbells"], kind: "isolation", target: "Triceps", reps: "10-15" },
+  { id: "diamond-push-ups", name: "Pompes diamant", focus: ["push", "upper"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "isolation", target: "Triceps", reps: "8-15" },
+  { id: "pull-ups", name: "Tractions pronation", focus: ["pull", "upper", "full"], equipment: ["gym", "bodyweight"], kind: "compound", target: "Dos", reps: "5-10" },
+  { id: "inverted-row", name: "Rowing inversé", focus: ["pull", "upper", "full"], equipment: ["gym", "bodyweight"], kind: "compound", target: "Dos", reps: "8-15" },
+  { id: "lat-pulldown", name: "Tirage vertical", focus: ["pull", "upper", "full"], equipment: ["gym"], kind: "compound", target: "Dos", reps: "8-12" },
+  { id: "barbell-row", name: "Rowing barre", focus: ["pull", "upper", "full"], equipment: ["gym"], kind: "compound", target: "Dos", reps: "6-10" },
+  { id: "db-row", name: "Rowing unilatéral haltère", focus: ["pull", "upper", "full"], equipment: ["gym", "dumbbells"], kind: "compound", target: "Dos", reps: "8-12 / côté" },
+  { id: "chest-supported-row", name: "Rowing haltères sur banc", focus: ["pull", "upper"], equipment: ["gym", "dumbbells"], kind: "compound", target: "Dos", reps: "10-15" },
+  { id: "rear-delt-machine", name: "Oiseau machine", focus: ["pull", "upper"], equipment: ["gym"], kind: "isolation", target: "Arrière d'épaule", reps: "12-20" },
+  { id: "rear-delt-db", name: "Oiseau haltères", focus: ["pull", "upper"], equipment: ["gym", "dumbbells"], kind: "isolation", target: "Arrière d'épaule", reps: "12-20" },
+  { id: "prone-y-raise", name: "Élévations Y au sol", focus: ["pull", "upper"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "isolation", target: "Haut du dos", reps: "12-20" },
+  { id: "barbell-curl", name: "Curl barre", focus: ["pull", "upper"], equipment: ["gym"], kind: "isolation", target: "Biceps", reps: "8-12" },
+  { id: "db-curl", name: "Curl alterné haltères", focus: ["pull", "upper"], equipment: ["gym", "dumbbells"], kind: "isolation", target: "Biceps", reps: "10-15" },
+  { id: "isometric-curl", name: "Curl isométrique auto-résisté", focus: ["pull", "upper"], equipment: ["bodyweight"], kind: "isolation", target: "Biceps", reps: "20-30 sec / côté" },
+  { id: "back-extension", name: "Extensions lombaires au sol", focus: ["pull", "lower", "full"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "isolation", target: "Lombaires", reps: "12-20" },
+  { id: "back-squat", name: "Squat barre", focus: ["legs", "lower", "full"], equipment: ["gym"], kind: "compound", target: "Quadriceps", reps: "6-10" },
+  { id: "hack-squat", name: "Hack squat", focus: ["legs", "lower", "full"], equipment: ["gym"], kind: "compound", target: "Quadriceps", reps: "8-12" },
+  { id: "goblet-squat", name: "Goblet squat", focus: ["legs", "lower", "full"], equipment: ["gym", "dumbbells"], kind: "compound", target: "Quadriceps", reps: "10-15" },
+  { id: "tempo-squat", name: "Squat tempo au poids du corps", focus: ["legs", "lower", "full"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "compound", target: "Quadriceps", reps: "12-20" },
+  { id: "leg-press", name: "Presse à cuisses", focus: ["legs", "lower", "full"], equipment: ["gym"], kind: "compound", target: "Quadriceps", reps: "10-15" },
+  { id: "bulgarian-split", name: "Fentes bulgares", focus: ["legs", "lower", "full"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "compound", target: "Quadriceps / fessiers", reps: "8-12 / côté" },
+  { id: "walking-lunge", name: "Fentes marchées", focus: ["legs", "lower", "full"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "compound", target: "Jambes", reps: "10-16 / côté" },
+  { id: "romanian-deadlift", name: "Soulevé de terre roumain", focus: ["legs", "lower", "full"], equipment: ["gym"], kind: "compound", target: "Ischio-jambiers", reps: "6-10" },
+  { id: "db-rdl", name: "Soulevé de terre roumain haltères", focus: ["legs", "lower", "full"], equipment: ["gym", "dumbbells"], kind: "compound", target: "Ischio-jambiers", reps: "8-12" },
+  { id: "single-leg-rdl", name: "Hip hinge une jambe", focus: ["legs", "lower", "full"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "compound", target: "Ischio-jambiers", reps: "10-15 / côté" },
+  { id: "leg-curl", name: "Leg curl", focus: ["legs", "lower"], equipment: ["gym"], kind: "isolation", target: "Ischio-jambiers", reps: "10-15" },
+  { id: "sliding-leg-curl", name: "Leg curl glissé au sol", focus: ["legs", "lower"], equipment: ["bodyweight"], kind: "isolation", target: "Ischio-jambiers", reps: "8-15" },
+  { id: "hip-thrust", name: "Hip thrust", focus: ["legs", "lower", "full"], equipment: ["gym"], kind: "compound", target: "Fessiers", reps: "8-12" },
+  { id: "db-hip-thrust", name: "Hip thrust avec haltère", focus: ["legs", "lower", "full"], equipment: ["gym", "dumbbells"], kind: "compound", target: "Fessiers", reps: "10-15" },
+  { id: "glute-bridge", name: "Pont fessier", focus: ["legs", "lower", "full"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "isolation", target: "Fessiers", reps: "15-25" },
+  { id: "leg-extension", name: "Leg extension", focus: ["legs", "lower"], equipment: ["gym"], kind: "isolation", target: "Quadriceps", reps: "12-20" },
+  { id: "sissy-squat", name: "Sissy squat assisté", focus: ["legs", "lower"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "isolation", target: "Quadriceps", reps: "10-20" },
+  { id: "calf-raise", name: "Mollets debout", focus: ["legs", "lower", "full"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "isolation", target: "Mollets", reps: "12-25" },
+  { id: "plank", name: "Gainage planche", focus: ["push", "pull", "legs", "upper", "lower", "full"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "core", target: "Sangle abdominale", reps: "30-60 sec" },
+  { id: "dead-bug", name: "Dead bug", focus: ["push", "pull", "legs", "upper", "lower", "full"], equipment: ["gym", "dumbbells", "bodyweight"], kind: "core", target: "Sangle abdominale", reps: "8-12 / côté" },
+  { id: "hanging-knee-raise", name: "Relevés de genoux suspendu", focus: ["pull", "upper", "full"], equipment: ["gym", "bodyweight"], kind: "core", target: "Abdominaux", reps: "10-15" },
+];
+
 const defaultProfile = {
   firstName: "Vincent",
   coachName: "Luc Chambrier",
@@ -29,6 +96,8 @@ let historyFilter = "all";
 let installPrompt = null;
 let toastTimer = null;
 let databasePromise = null;
+let currentWorkout = null;
+let currentWorkoutDate = null;
 
 const dom = {
   content: document.querySelector("#app-content"),
@@ -36,6 +105,8 @@ const dom = {
   navItems: [...document.querySelectorAll(".nav-item")],
   morningForm: document.querySelector("#morning-form"),
   eveningForm: document.querySelector("#evening-form"),
+  workoutResult: document.querySelector("#workout-result"),
+  exerciseList: document.querySelector("#exercise-list"),
   historyList: document.querySelector("#history-list"),
   historyEmpty: document.querySelector("#history-empty"),
   historySearch: document.querySelector("#history-search"),
@@ -228,6 +299,7 @@ function routeTo(route, options = {}) {
   if (route === "home") renderDashboard();
   if (route === "morning") populateMorningForm(options.date || todayKey());
   if (route === "evening") populateEveningForm(options.date || todayKey());
+  if (route === "workout") populateWorkoutBuilder(options.date || todayKey());
   if (route === "history") renderHistory();
 
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -387,6 +459,234 @@ function saveEvening(event) {
   saveEntries();
   showToast("Saisie du soir enregistrée");
   routeTo("home");
+}
+
+function shuffle(items) {
+  const copy = [...items];
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [copy[index], copy[randomIndex]] = [copy[randomIndex], copy[index]];
+  }
+  return copy;
+}
+
+function workoutExerciseCount(duration) {
+  if (duration <= 35) return 4;
+  if (duration <= 50) return 6;
+  if (duration <= 65) return 7;
+  return 8;
+}
+
+function exercisePrescription(exercise, intensity) {
+  const prescriptions = {
+    light: {
+      compound: { sets: 2, rest: 75 },
+      isolation: { sets: 2, rest: 45 },
+      core: { sets: 2, rest: 45 },
+      effort: "Garde 3 répétitions en réserve",
+    },
+    standard: {
+      compound: { sets: 3, rest: 120 },
+      isolation: { sets: 3, rest: 75 },
+      core: { sets: 3, rest: 60 },
+      effort: "Garde 2 répétitions en réserve",
+    },
+    hard: {
+      compound: { sets: 4, rest: 150 },
+      isolation: { sets: 3, rest: 90 },
+      core: { sets: 3, rest: 60 },
+      effort: "Garde 1 répétition en réserve",
+    },
+  };
+  const prescription = prescriptions[intensity];
+  return {
+    ...exercise,
+    sets: prescription[exercise.kind].sets,
+    rest: prescription[exercise.kind].rest,
+    effort: prescription.effort,
+  };
+}
+
+function recentInjury() {
+  return Object.values(entries)
+    .filter((entry) => entry.evening?.injury === "Oui")
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .some((entry) => {
+      const daysAgo = (parseLocalDate(todayKey()) - parseLocalDate(entry.date)) / 86400000;
+      return daysAgo >= 0 && daysAgo <= 7;
+    });
+}
+
+function eligibleExercises(focus, equipment) {
+  return exerciseLibrary.filter(
+    (exercise) => exercise.focus.includes(focus) && exercise.equipment.includes(equipment),
+  );
+}
+
+function exerciseMuscleGroup(exercise) {
+  const target = exercise.target.toLowerCase();
+  if (target.includes("pect")) return "chest";
+  if (target.includes("dos") || target.includes("lomb")) return "back";
+  if (target.includes("épaule") || target.includes("delto")) return "shoulders";
+  if (target.includes("triceps")) return "triceps";
+  if (target.includes("biceps")) return "biceps";
+  if (target.includes("quadriceps")) return "quads";
+  if (target.includes("ischio")) return "hamstrings";
+  if (target.includes("fessier")) return "glutes";
+  if (target.includes("mollet")) return "calves";
+  if (target.includes("abdominal") || target.includes("sangle")) return "core";
+  return exercise.target;
+}
+
+function pickDiverse(candidates, count, selected = []) {
+  if (count <= 0) return [];
+  const available = shuffle(candidates.filter((exercise) => !selected.some((item) => item.id === exercise.id)));
+  const usedGroups = new Set(selected.map(exerciseMuscleGroup));
+  const diverse = available.filter((exercise) => !usedGroups.has(exerciseMuscleGroup(exercise)));
+  const remainder = available.filter((exercise) => !diverse.includes(exercise));
+  return [...diverse, ...remainder].slice(0, count);
+}
+
+function buildWorkout() {
+  const focus = document.querySelector("#workout-focus").value;
+  const duration = Number(document.querySelector("#workout-duration").value);
+  const equipment = document.querySelector("#workout-equipment").value;
+  let intensity = document.querySelector("#workout-intensity").value;
+  const injuryWarning = recentInjury();
+  if (injuryWarning && intensity === "hard") {
+    intensity = "light";
+    document.querySelector("#workout-intensity").value = intensity;
+    showToast("Intensité réduite : douleur récente signalée");
+  }
+
+  const candidates = eligibleExercises(focus, equipment);
+  const desiredCount = Math.min(workoutExerciseCount(duration), candidates.length);
+  const compounds = candidates.filter((exercise) => exercise.kind === "compound");
+  const accessories = candidates.filter((exercise) => exercise.kind !== "compound");
+  const minimumCompounds = focus === "full" ? 3 : 2;
+  const compoundCount = Math.min(Math.max(minimumCompounds, Math.ceil(desiredCount / 2)), compounds.length);
+  const selected = [];
+
+  if (focus === "full") {
+    ["push", "pull", "legs"].forEach((area) => {
+      const [exercise] = shuffle(
+        compounds.filter(
+          (candidate) => candidate.focus.includes(area) && !selected.some((item) => item.id === candidate.id),
+        ),
+      );
+      if (exercise) selected.push(exercise);
+    });
+  } else if (focus === "upper") {
+    ["push", "pull"].forEach((area) => {
+      const [exercise] = shuffle(
+        compounds.filter(
+          (candidate) => candidate.focus.includes(area) && !selected.some((item) => item.id === candidate.id),
+        ),
+      );
+      if (exercise) selected.push(exercise);
+    });
+  }
+
+  selected.push(...pickDiverse(compounds, compoundCount - selected.length, selected));
+  selected.push(...pickDiverse(accessories, desiredCount - selected.length, selected));
+
+  if (selected.length < desiredCount) {
+    const selectedIds = new Set(selected.map((exercise) => exercise.id));
+    selected.push(...shuffle(candidates.filter((exercise) => !selectedIds.has(exercise.id))).slice(0, desiredCount - selected.length));
+  }
+
+  currentWorkout = {
+    focus,
+    duration,
+    equipment,
+    intensity,
+    title: workoutLabels[focus],
+    exercises: selected.map((exercise) => exercisePrescription(exercise, intensity)),
+    generatedAt: new Date().toISOString(),
+  };
+  renderWorkout();
+}
+
+function populateWorkoutBuilder(date) {
+  currentWorkoutDate = date;
+  const savedWorkout = getEntry(date).workout;
+  currentWorkout = savedWorkout ? structuredClone(savedWorkout) : null;
+
+  if (savedWorkout) {
+    document.querySelector("#workout-focus").value = savedWorkout.focus;
+    document.querySelector("#workout-duration").value = String(savedWorkout.duration);
+    document.querySelector("#workout-equipment").value = savedWorkout.equipment;
+    document.querySelector("#workout-intensity").value = savedWorkout.intensity;
+    renderWorkout();
+  } else {
+    dom.workoutResult.classList.add("is-hidden");
+    dom.exerciseList.innerHTML = "";
+  }
+
+  document.querySelector("#save-workout-label").textContent =
+    date === todayKey() ? "Enregistrer aujourd’hui" : `Enregistrer le ${formatDate(date)}`;
+}
+
+function renderWorkout() {
+  if (!currentWorkout) return;
+  document.querySelector("#generated-workout-title").textContent =
+    `${currentWorkout.title} · ${currentWorkout.duration} min`;
+  document.querySelector("#generated-workout-meta").textContent =
+    `${currentWorkout.exercises.length} exercices · Intensité ${workoutLabels[currentWorkout.intensity].toLowerCase()} · ${workoutLabels[currentWorkout.equipment]}`;
+  document.querySelector("#workout-warning").classList.toggle("is-hidden", !recentInjury());
+  dom.exerciseList.innerHTML = currentWorkout.exercises
+    .map(
+      (exercise, index) => `
+        <li class="exercise-card">
+          <span class="exercise-index">${String(index + 1).padStart(2, "0")}</span>
+          <div class="exercise-copy">
+            <strong>${escapeHtml(exercise.name)}</strong>
+            <span>${escapeHtml(exercise.target)} · ${exercise.sets} × ${escapeHtml(exercise.reps)}</span>
+            <small>${exercise.rest} sec de repos · ${escapeHtml(exercise.effort)}</small>
+          </div>
+          <button type="button" data-replace-exercise="${index}" aria-label="Changer ${escapeHtml(exercise.name)}">
+            <svg viewBox="0 0 24 24"><path d="M20 7h-4V3M4 17h4v4M5.5 8.5A7 7 0 0 1 16 5l4 2M18.5 15.5A7 7 0 0 1 8 19l-4-2"></path></svg>
+          </button>
+        </li>
+      `,
+    )
+    .join("");
+  dom.workoutResult.classList.remove("is-hidden");
+}
+
+function replaceWorkoutExercise(index) {
+  if (!currentWorkout) return;
+  const existing = currentWorkout.exercises[index];
+  const usedIds = new Set(currentWorkout.exercises.map((exercise) => exercise.id));
+  const unused = eligibleExercises(currentWorkout.focus, currentWorkout.equipment).filter(
+    (exercise) => !usedIds.has(exercise.id),
+  );
+  const movementAreas = currentWorkout.focus === "full" ? ["push", "pull", "legs"] : ["push", "pull"];
+  const movementArea = movementAreas.find((area) => existing.focus.includes(area));
+  const sameRole = unused.filter(
+    (exercise) =>
+      exercise.kind === existing.kind &&
+      (movementArea ? exercise.focus.includes(movementArea) : exerciseMuscleGroup(exercise) === exerciseMuscleGroup(existing)),
+  );
+  const sameKind = unused.filter((exercise) => exercise.kind === existing.kind);
+  const [replacement] = shuffle(sameRole.length ? sameRole : sameKind.length ? sameKind : unused);
+  if (!replacement) {
+    showToast("Aucune autre variante disponible");
+    return;
+  }
+  currentWorkout.exercises[index] = exercisePrescription(replacement, currentWorkout.intensity);
+  renderWorkout();
+}
+
+function saveWorkout() {
+  if (!currentWorkout || !currentWorkoutDate) return;
+  const entry = ensureEntry(currentWorkoutDate);
+  entry.workout = {
+    ...structuredClone(currentWorkout),
+    savedAt: new Date().toISOString(),
+  };
+  saveEntries();
+  showToast("Séance enregistrée dans ton historique");
 }
 
 function renderDashboard() {
@@ -611,12 +911,18 @@ function historyCard(entry) {
         <div class="history-stat"><span>Poids</span><strong>${hasValue(entry.morning?.weight) ? `${round(entry.morning.weight)} kg` : "—"}</strong></div>
         <div class="history-stat"><span>Sommeil</span><strong>${entry.morning?.sleepQuality ? `${entry.morning.sleepQuality}/7` : "—"}</strong></div>
         <div class="history-stat"><span>Pas</span><strong>${hasValue(entry.evening?.steps) ? formatNumber(entry.evening.steps) : "—"}</strong></div>
-        <div class="history-stat"><span>Training</span><strong>${escapeHtml(entry.evening?.training || "—")}</strong></div>
+        <div class="history-stat"><span>Training</span><strong>${escapeHtml(entry.evening?.training || entry.workout?.title || "—")}</strong></div>
       </div>
+      ${
+        entry.workout
+          ? `<div class="history-workout"><strong>${escapeHtml(entry.workout.title)} · ${entry.workout.duration} min</strong><span>${entry.workout.exercises.length} exercices · ${escapeHtml(workoutLabels[entry.workout.intensity] || entry.workout.intensity)}</span></div>`
+          : ""
+      }
       ${notes ? `<div class="history-notes">${escapeHtml(notes)}</div>` : ""}
       <div class="history-card-actions">
         <button type="button" data-edit-morning="${entry.date}">Modifier matin</button>
         <button type="button" data-edit-evening="${entry.date}">Modifier soir</button>
+        ${entry.workout ? `<button type="button" data-edit-workout="${entry.date}">Voir séance</button>` : ""}
         <button type="button" data-delete-entry="${entry.date}">Supprimer</button>
       </div>
     </article>
@@ -639,6 +945,7 @@ function exportCsv() {
     "Pas",
     "Cardio",
     "Entraînement",
+    "Séance générée",
     "Humeur",
     "Énergie",
     "Courbatures",
@@ -670,6 +977,9 @@ function exportCsv() {
       entry.evening?.steps,
       entry.evening?.cardio,
       entry.evening?.training,
+      entry.workout
+        ? `${entry.workout.title} - ${entry.workout.exercises.map((exercise) => `${exercise.name} ${exercise.sets}x${exercise.reps}`).join(" | ")}`
+        : "",
       entry.evening?.mood,
       entry.evening?.energy,
       entry.evening?.soreness,
@@ -781,6 +1091,12 @@ function initializeEvents() {
     const editEvening = event.target.closest("[data-edit-evening]");
     if (editEvening) routeTo("evening", { date: editEvening.dataset.editEvening });
 
+    const editWorkout = event.target.closest("[data-edit-workout]");
+    if (editWorkout) routeTo("workout", { date: editWorkout.dataset.editWorkout });
+
+    const replaceExercise = event.target.closest("[data-replace-exercise]");
+    if (replaceExercise) replaceWorkoutExercise(Number(replaceExercise.dataset.replaceExercise));
+
     const deleteButton = event.target.closest("[data-delete-entry]");
     if (deleteButton && window.confirm(`Supprimer toutes les données du ${formatDate(deleteButton.dataset.deleteEntry, { year: true })} ?`)) {
       delete entries[deleteButton.dataset.deleteEntry];
@@ -792,6 +1108,14 @@ function initializeEvents() {
 
   dom.morningForm.addEventListener("submit", saveMorning);
   dom.eveningForm.addEventListener("submit", saveEvening);
+  document.querySelector("#generate-workout-button").addEventListener("click", buildWorkout);
+  document.querySelector("#regenerate-workout-button").addEventListener("click", buildWorkout);
+  document.querySelector("#discard-workout-button").addEventListener("click", () => {
+    currentWorkout = null;
+    dom.workoutResult.classList.add("is-hidden");
+    dom.exerciseList.innerHTML = "";
+  });
+  document.querySelector("#save-workout-button").addEventListener("click", saveWorkout);
   document.querySelector(".accordion-trigger").addEventListener("click", (event) => {
     toggleAccordion(event.currentTarget.getAttribute("aria-expanded") !== "true");
   });
@@ -872,7 +1196,7 @@ async function initializeApp() {
   updateConnectionStatus();
   configureInstallation();
   const hashRoute = window.location.hash.slice(1);
-  routeTo(["morning", "evening", "history"].includes(hashRoute) ? hashRoute : "home");
+  routeTo(["morning", "evening", "workout", "history"].includes(hashRoute) ? hashRoute : "home");
   registerServiceWorker();
 }
 
