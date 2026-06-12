@@ -30,6 +30,88 @@ const workoutLabels = {
   bodyweight: "Poids du corps",
 };
 
+const workoutDisciplineLabels = {
+  strength: "Musculation",
+  hyrox: "HYROX",
+  athx: "ATHX",
+};
+
+const workoutControlOptions = {
+  strength: {
+    focusLabel: "Zone",
+    focus: [
+      ["push", "Push"],
+      ["pull", "Pull"],
+      ["legs", "Jambes"],
+      ["upper", "Haut du corps"],
+      ["lower", "Bas du corps"],
+      ["full", "Full body"],
+    ],
+    duration: [[35, "35 min"], [50, "50 min"], [65, "65 min"], [80, "80 min"]],
+    equipmentLabel: "Matériel",
+    equipment: [
+      ["gym", "Salle complète"],
+      ["dumbbells", "Haltères + banc"],
+      ["bodyweight", "Poids du corps"],
+    ],
+    help: "Un tirage équilibré selon la zone, le matériel et le temps disponible.",
+  },
+  hyrox: {
+    focusLabel: "Format",
+    focus: [
+      ["technique", "Technique stations"],
+      ["engine", "Course + stations"],
+      ["simulation", "Simulation course"],
+    ],
+    duration: [[40, "40 min"], [60, "60 min"], [90, "90 min et +"]],
+    equipmentLabel: "Installation",
+    equipment: [
+      ["gym", "Équipement HYROX"],
+      ["dumbbells", "Sans traîneau"],
+      ["bodyweight", "Matériel minimal"],
+    ],
+    help: "Basé sur l’ordre officiel HYROX : 1 km de course puis une station, répété 8 fois.",
+  },
+  athx: {
+    focusLabel: "Zone",
+    focus: [
+      ["strength", "Strength"],
+      ["endurance", "Endurance"],
+      ["metcon", "MetCon X"],
+      ["combo", "Mix ATHX"],
+    ],
+    duration: [[35, "35 min"], [50, "50 min"], [70, "70 min"]],
+    equipmentLabel: "Installation",
+    equipment: [
+      ["gym", "Salle fonctionnelle"],
+      ["dumbbells", "Sans machines spécifiques"],
+      ["bodyweight", "Matériel minimal"],
+    ],
+    help: "Inspiré des workouts ATHX 2026 : force, alternance course/rameur et MetCon X.",
+  },
+};
+
+const hyroxStations = [
+  { id: "ski", name: "SkiErg", amount: 1000, unit: "m", target: "Cardio haut du corps", alternatives: { bodyweight: ["Mountain climbers", 100, "rép."] } },
+  { id: "sled-push", name: "Sled Push", amount: 50, unit: "m", target: "Poussée lourde", alternatives: { dumbbells: ["Marche front rack haltères", 50, "m"], bodyweight: ["Bear crawl", 40, "m"] } },
+  { id: "sled-pull", name: "Sled Pull", amount: 50, unit: "m", target: "Tirage lourd", alternatives: { dumbbells: ["Marche arrière chargée", 50, "m"], bodyweight: ["Fentes arrière", 40, "rép."] } },
+  { id: "burpee-broad-jumps", name: "Burpee Broad Jumps", amount: 80, unit: "m", target: "Explosivité", alternatives: {} },
+  { id: "row", name: "Rameur", amount: 1000, unit: "m", target: "Cardio complet", alternatives: { bodyweight: ["Course soutenue", 800, "m"] } },
+  { id: "farmers-carry", name: "Farmers Carry", amount: 200, unit: "m", target: "Grip et gainage", alternatives: { bodyweight: ["Carry sac à dos", 200, "m"] } },
+  { id: "sandbag-lunges", name: "Sandbag Lunges", amount: 100, unit: "m", target: "Jambes", alternatives: { dumbbells: ["Fentes marchées haltères", 100, "m"], bodyweight: ["Fentes marchées", 100, "m"] } },
+  { id: "wall-balls", name: "Wall Balls", amount: 100, unit: "rép.", target: "Jambes et épaules", alternatives: { dumbbells: ["Thrusters haltère", 50, "rép."], bodyweight: ["Squat jumps", 50, "rép."] } },
+];
+
+const athxMetconMovements = [
+  { id: "ski-open", name: "SkiErg", target: "Cardio", amount: 45, unit: "cal H / 30 cal F", alternatives: { dumbbells: ["Rameur ou course", 800, "m"], bodyweight: ["Course", 800, "m"] } },
+  { id: "gtoh", name: "Ground to Overhead alterné", target: "Puissance", amount: 30, unit: "rép.", alternatives: { bodyweight: ["Burpees", 30, "rép."] } },
+  { id: "sandbag-carry", name: "Sandbag Carry", target: "Carry lourd", amount: 30, unit: "m", alternatives: { dumbbells: ["Farmers Carry", 60, "m"], bodyweight: ["Carry sac à dos", 60, "m"] } },
+  { id: "box-jump", name: "Box Jump Overs", target: "Explosivité", amount: 30, unit: "rép.", alternatives: { bodyweight: ["Sauts latéraux", 40, "rép."] } },
+  { id: "db-lunges", name: "Fentes marchées avec haltères", target: "Jambes", amount: 30, unit: "m", alternatives: { bodyweight: ["Fentes marchées", 40, "m"] } },
+  { id: "burpee-broad-jumps", name: "Burpee Broad Jumps", target: "Conditioning", amount: 30, unit: "m", alternatives: {} },
+  { id: "ski-close", name: "SkiErg final", target: "Cardio", amount: 45, unit: "cal H / 30 cal F", alternatives: { dumbbells: ["Rameur ou course", 800, "m"], bodyweight: ["Course", 800, "m"] } },
+];
+
 const exerciseLibrary = [
   { id: "bench-press", name: "Développé couché barre", focus: ["push", "upper", "full"], equipment: ["gym"], kind: "compound", target: "Pectoraux", reps: "6-10" },
   { id: "incline-machine", name: "Développé incliné machine", focus: ["push", "upper"], equipment: ["gym"], kind: "compound", target: "Haut de pectoraux", reps: "8-12" },
@@ -547,17 +629,63 @@ function pickDiverse(candidates, count, selected = []) {
   return [...diverse, ...remainder].slice(0, count);
 }
 
-function buildWorkout() {
-  const focus = document.querySelector("#workout-focus").value;
-  const duration = Number(document.querySelector("#workout-duration").value);
-  const equipment = document.querySelector("#workout-equipment").value;
+function setSelectOptions(select, options, selectedValue) {
+  select.innerHTML = "";
+  options.forEach(([value, label]) => {
+    const option = document.createElement("option");
+    option.value = String(value);
+    option.textContent = label;
+    select.append(option);
+  });
+  if (selectedValue !== undefined && [...select.options].some((option) => option.value === String(selectedValue))) {
+    select.value = String(selectedValue);
+  }
+}
+
+function configureWorkoutControls(discipline, values = {}) {
+  const config = workoutControlOptions[discipline] || workoutControlOptions.strength;
+  const defaults = {
+    strength: { focus: "push", duration: 50, equipment: "gym" },
+    hyrox: { focus: "technique", duration: 60, equipment: "gym" },
+    athx: { focus: "strength", duration: 50, equipment: "gym" },
+  }[discipline] || {};
+  document.querySelector("#workout-discipline").value = discipline;
+  document.querySelector("#workout-focus-label").textContent = config.focusLabel;
+  document.querySelector("#workout-equipment-label").textContent = config.equipmentLabel;
+  document.querySelector("#workout-discipline-help").textContent = config.help;
+  setSelectOptions(document.querySelector("#workout-focus"), config.focus, values.focus ?? defaults.focus);
+  setSelectOptions(document.querySelector("#workout-duration"), config.duration, values.duration ?? defaults.duration);
+  setSelectOptions(document.querySelector("#workout-equipment"), config.equipment, values.equipment ?? defaults.equipment);
+}
+
+function selectedWorkoutIntensity() {
   let intensity = document.querySelector("#workout-intensity").value;
-  const injuryWarning = recentInjury();
-  if (injuryWarning && intensity === "hard") {
+  if (recentInjury() && intensity === "hard") {
     intensity = "light";
     document.querySelector("#workout-intensity").value = intensity;
     showToast("Intensité réduite : douleur récente signalée");
   }
+  return intensity;
+}
+
+function buildWorkout() {
+  const discipline = document.querySelector("#workout-discipline").value;
+  if (discipline === "hyrox") {
+    buildHyroxWorkout();
+    return;
+  }
+  if (discipline === "athx") {
+    buildAthxWorkout();
+    return;
+  }
+  buildStrengthWorkout();
+}
+
+function buildStrengthWorkout() {
+  const focus = document.querySelector("#workout-focus").value;
+  const duration = Number(document.querySelector("#workout-duration").value);
+  const equipment = document.querySelector("#workout-equipment").value;
+  const intensity = selectedWorkoutIntensity();
 
   const candidates = eligibleExercises(focus, equipment);
   const desiredCount = Math.min(workoutExerciseCount(duration), candidates.length);
@@ -596,6 +724,7 @@ function buildWorkout() {
   }
 
   currentWorkout = {
+    discipline: "strength",
     focus,
     duration,
     equipment,
@@ -607,15 +736,170 @@ function buildWorkout() {
   renderWorkout();
 }
 
+function scaledTrainingAmount(amount, unit, intensity, exact = false) {
+  if (exact) return amount;
+  const factor = { light: 0.6, standard: 0.8, hard: 1 }[intensity];
+  const raw = amount * factor;
+  if (unit === "m") return Math.max(10, Math.round(raw / 10) * 10);
+  return Math.max(5, Math.round(raw / 5) * 5);
+}
+
+function hybridVariant(item, equipment) {
+  const alternative = item.alternatives?.[equipment];
+  if (!alternative) return { name: item.name, amount: item.amount, unit: item.unit, adapted: false };
+  return { name: alternative[0], amount: alternative[1], unit: alternative[2], adapted: true };
+}
+
+function buildHyroxWorkout() {
+  const focus = document.querySelector("#workout-focus").value;
+  let duration = Number(document.querySelector("#workout-duration").value);
+  const equipment = document.querySelector("#workout-equipment").value;
+  const intensity = selectedWorkoutIntensity();
+  const exactSimulation = focus === "simulation";
+  if (exactSimulation) duration = 90;
+
+  const stationCount = exactSimulation ? 8 : Math.min(hyroxStations.length, duration <= 40 ? 4 : duration <= 60 ? 6 : 8);
+  const stations = exactSimulation ? hyroxStations : shuffle(hyroxStations).slice(0, stationCount);
+  const runDistance = exactSimulation
+    ? 1000
+    : focus === "engine"
+      ? { light: 600, standard: 800, hard: 1000 }[intensity]
+      : { light: 300, standard: 500, hard: 700 }[intensity];
+  const rest = focus === "technique" ? 90 : intensity === "light" ? 90 : intensity === "standard" ? 60 : 30;
+
+  const exercises = stations.map((station, index) => {
+    const variant = hybridVariant(station, equipment);
+    const amount = scaledTrainingAmount(variant.amount, variant.unit, intensity, exactSimulation);
+    return {
+      id: `hyrox-${station.id}`,
+      name: `${runDistance / 1000 >= 1 ? `${runDistance / 1000} km` : `${runDistance} m`} course + ${variant.name}`,
+      target: `Bloc ${index + 1} · ${station.target}`,
+      detail: `${amount} ${variant.unit}`,
+      note: exactSimulation
+        ? `${equipment === "gym" ? "Ordre et distance de course officiels" : "Station adaptée au matériel disponible"}`
+        : `${rest} sec de récupération · allure régulière`,
+      locked: exactSimulation,
+    };
+  });
+
+  const title =
+    focus === "simulation"
+      ? `Simulation HYROX${equipment === "gym" ? "" : " adaptée"}`
+      : focus === "engine"
+        ? "HYROX Engine"
+        : "Technique HYROX";
+  currentWorkout = {
+    discipline: "hyrox",
+    focus,
+    duration,
+    equipment,
+    intensity,
+    title,
+    exercises,
+    generatedAt: new Date().toISOString(),
+  };
+  renderWorkout();
+}
+
+function athxMetconAmount(movement, intensity) {
+  if (movement.unit.includes("cal H")) {
+    return intensity === "light"
+      ? "30 cal H / 20 cal F"
+      : intensity === "standard"
+        ? "40 cal H / 25 cal F"
+        : `${movement.amount} ${movement.unit}`;
+  }
+  return `${scaledTrainingAmount(movement.amount, movement.unit, intensity)} ${movement.unit}`;
+}
+
+function athxMetconStep(movement, equipment, intensity, index) {
+  const variant = hybridVariant(movement, equipment);
+  const detail = variant.adapted
+    ? `${scaledTrainingAmount(variant.amount, variant.unit, intensity)} ${variant.unit}`
+    : athxMetconAmount(movement, intensity);
+  return {
+    id: `athx-${movement.id}`,
+    name: variant.name,
+    target: `MetCon X · étape ${index + 1}`,
+    detail,
+    note: "Enchaîne proprement, charge validée avec le coach",
+    locked: true,
+  };
+}
+
+function buildAthxWorkout() {
+  const focus = document.querySelector("#workout-focus").value;
+  const duration = Number(document.querySelector("#workout-duration").value);
+  const equipment = document.querySelector("#workout-equipment").value;
+  const intensity = selectedWorkoutIntensity();
+  const effort = { light: "RPE 6", standard: "RPE 7-8", hard: "RPE 8-9" }[intensity];
+  let exercises = [];
+  let title = "";
+
+  if (focus === "strength") {
+    title = "ATHX Strength";
+    exercises = [
+      { id: "athx-press", name: "Strict Press", target: "Fenêtre 0-6 min", detail: intensity === "hard" ? "Monter vers un 1RM encadré" : `3 à 5 répétitions · ${effort}`, note: "Format compétition 2026 : 1RM", locked: true },
+      { id: "athx-squat", name: "Back Squat", target: "Fenêtre 6-12 min", detail: intensity === "hard" ? "Monter vers un 3RM encadré" : `3 à 5 répétitions · ${effort}`, note: "Format compétition 2026 : 3RM", locked: true },
+      { id: "athx-deadlift", name: "Deadlift", target: "Fenêtre 12-20 min", detail: intensity === "hard" ? "Monter vers un 5RM encadré" : `3 à 5 répétitions · ${effort}`, note: "Format compétition 2026 : 5RM", locked: true },
+    ];
+  } else if (focus === "endurance") {
+    title = "ATHX Endurance";
+    const distance = { light: 500, standard: 750, hard: 1000 }[intensity];
+    const workTime = { light: 16, standard: 20, hard: 22 }[intensity];
+    exercises = [
+      { id: "athx-endurance-warmup", name: "Échauffement progressif", target: "Course et rameur", detail: "8 min faciles", note: "Monte progressivement en fréquence cardiaque", locked: true },
+      {
+        id: "athx-endurance-main",
+        name: equipment === "bodyweight" ? "Alternance de course" : "Alternance course / rameur",
+        target: "Bloc principal",
+        detail: equipment === "bodyweight" ? `${workTime} min · ${distance} m vite / ${distance} m facile` : `${workTime} min · change tous les ${distance} m`,
+        note: "Le format ATHX 2026 alterne course et rameur avec un cap de 22 min",
+        locked: true,
+      },
+      { id: "athx-endurance-cooldown", name: "Retour au calme", target: "Récupération", detail: "5 min faciles", note: "Respiration contrôlée", locked: true },
+    ];
+  } else if (focus === "metcon") {
+    title = "ATHX MetCon X";
+    exercises = athxMetconMovements.map((movement, index) => athxMetconStep(movement, equipment, intensity, index));
+  } else {
+    title = "Mix ATHX";
+    const strengthMoves = [
+      ["Strict Press", "4 × 5", "Force haut du corps"],
+      ["Back Squat", "4 × 5", "Force jambes"],
+      ["Deadlift", "4 × 5", "Force chaîne postérieure"],
+    ];
+    const [strengthMove] = shuffle(strengthMoves);
+    const metconSelection = shuffle(athxMetconMovements.slice(1, -1)).slice(0, duration <= 35 ? 2 : 3);
+    const distance = { light: 400, standard: 600, hard: 750 }[intensity];
+    exercises = [
+      { id: "athx-mix-strength", name: strengthMove[0], target: strengthMove[2], detail: `${strengthMove[1]} · ${effort}`, note: "Garde une exécution propre", locked: true },
+      { id: "athx-mix-engine", name: equipment === "bodyweight" ? "Intervalles course" : "Course + rameur", target: "Endurance", detail: `3 tours · ${distance} m + ${distance} m`, note: "Récupération 60 à 90 sec", locked: true },
+      ...metconSelection.map((movement, index) => athxMetconStep(movement, equipment, intensity, index)),
+    ];
+  }
+
+  currentWorkout = {
+    discipline: "athx",
+    focus,
+    duration,
+    equipment,
+    intensity,
+    title,
+    exercises,
+    generatedAt: new Date().toISOString(),
+  };
+  renderWorkout();
+}
+
 function populateWorkoutBuilder(date) {
   currentWorkoutDate = date;
   const savedWorkout = getEntry(date).workout;
   currentWorkout = savedWorkout ? structuredClone(savedWorkout) : null;
+  const discipline = savedWorkout?.discipline || "strength";
+  configureWorkoutControls(discipline, savedWorkout || {});
 
   if (savedWorkout) {
-    document.querySelector("#workout-focus").value = savedWorkout.focus;
-    document.querySelector("#workout-duration").value = String(savedWorkout.duration);
-    document.querySelector("#workout-equipment").value = savedWorkout.equipment;
     document.querySelector("#workout-intensity").value = savedWorkout.intensity;
     renderWorkout();
   } else {
@@ -629,10 +913,12 @@ function populateWorkoutBuilder(date) {
 
 function renderWorkout() {
   if (!currentWorkout) return;
+  const discipline = currentWorkout.discipline || "strength";
+  const isStrength = discipline === "strength";
   document.querySelector("#generated-workout-title").textContent =
     `${currentWorkout.title} · ${currentWorkout.duration} min`;
   document.querySelector("#generated-workout-meta").textContent =
-    `${currentWorkout.exercises.length} exercices · Intensité ${workoutLabels[currentWorkout.intensity].toLowerCase()} · ${workoutLabels[currentWorkout.equipment]}`;
+    `${workoutDisciplineLabels[discipline]} · ${currentWorkout.exercises.length} ${isStrength ? "exercices" : "blocs"} · Intensité ${workoutLabels[currentWorkout.intensity].toLowerCase()}`;
   document.querySelector("#workout-warning").classList.toggle("is-hidden", !recentInjury());
   dom.exerciseList.innerHTML = currentWorkout.exercises
     .map(
@@ -641,12 +927,16 @@ function renderWorkout() {
           <span class="exercise-index">${String(index + 1).padStart(2, "0")}</span>
           <div class="exercise-copy">
             <strong>${escapeHtml(exercise.name)}</strong>
-            <span>${escapeHtml(exercise.target)} · ${exercise.sets} × ${escapeHtml(exercise.reps)}</span>
-            <small>${exercise.rest} sec de repos · ${escapeHtml(exercise.effort)}</small>
+            <span>${escapeHtml(exercise.target)} · ${escapeHtml(exercise.detail || `${exercise.sets} × ${exercise.reps}`)}</span>
+            <small>${escapeHtml(exercise.note || `${exercise.rest} sec de repos · ${exercise.effort}`)}</small>
           </div>
-          <button type="button" data-replace-exercise="${index}" aria-label="Changer ${escapeHtml(exercise.name)}">
-            <svg viewBox="0 0 24 24"><path d="M20 7h-4V3M4 17h4v4M5.5 8.5A7 7 0 0 1 16 5l4 2M18.5 15.5A7 7 0 0 1 8 19l-4-2"></path></svg>
-          </button>
+          ${
+            isStrength
+              ? `<button type="button" data-replace-exercise="${index}" aria-label="Changer ${escapeHtml(exercise.name)}">
+                  <svg viewBox="0 0 24 24"><path d="M20 7h-4V3M4 17h4v4M5.5 8.5A7 7 0 0 1 16 5l4 2M18.5 15.5A7 7 0 0 1 8 19l-4-2"></path></svg>
+                </button>`
+              : '<span class="exercise-lock" aria-hidden="true">✓</span>'
+          }
         </li>
       `,
     )
@@ -656,6 +946,10 @@ function renderWorkout() {
 
 function replaceWorkoutExercise(index) {
   if (!currentWorkout) return;
+  if ((currentWorkout.discipline || "strength") !== "strength") {
+    showToast("Régénère la séance pour changer les blocs");
+    return;
+  }
   const existing = currentWorkout.exercises[index];
   const usedIds = new Set(currentWorkout.exercises.map((exercise) => exercise.id));
   const unused = eligibleExercises(currentWorkout.focus, currentWorkout.equipment).filter(
@@ -915,7 +1209,7 @@ function historyCard(entry) {
       </div>
       ${
         entry.workout
-          ? `<div class="history-workout"><strong>${escapeHtml(entry.workout.title)} · ${entry.workout.duration} min</strong><span>${entry.workout.exercises.length} exercices · ${escapeHtml(workoutLabels[entry.workout.intensity] || entry.workout.intensity)}</span></div>`
+          ? `<div class="history-workout"><strong>${escapeHtml(entry.workout.title)} · ${entry.workout.duration} min</strong><span>${escapeHtml(workoutDisciplineLabels[entry.workout.discipline || "strength"])} · ${entry.workout.exercises.length} ${(entry.workout.discipline || "strength") === "strength" ? "exercices" : "blocs"} · ${escapeHtml(workoutLabels[entry.workout.intensity] || entry.workout.intensity)}</span></div>`
           : ""
       }
       ${notes ? `<div class="history-notes">${escapeHtml(notes)}</div>` : ""}
@@ -978,7 +1272,7 @@ function exportCsv() {
       entry.evening?.cardio,
       entry.evening?.training,
       entry.workout
-        ? `${entry.workout.title} - ${entry.workout.exercises.map((exercise) => `${exercise.name} ${exercise.sets}x${exercise.reps}`).join(" | ")}`
+        ? `${workoutDisciplineLabels[entry.workout.discipline || "strength"]} - ${entry.workout.title} - ${entry.workout.exercises.map((exercise) => `${exercise.name} ${exercise.detail || `${exercise.sets}x${exercise.reps}`}`).join(" | ")}`
         : "",
       entry.evening?.mood,
       entry.evening?.energy,
@@ -1110,6 +1404,17 @@ function initializeEvents() {
   dom.eveningForm.addEventListener("submit", saveEvening);
   document.querySelector("#generate-workout-button").addEventListener("click", buildWorkout);
   document.querySelector("#regenerate-workout-button").addEventListener("click", buildWorkout);
+  document.querySelector("#workout-discipline").addEventListener("change", (event) => {
+    configureWorkoutControls(event.target.value);
+    currentWorkout = null;
+    dom.workoutResult.classList.add("is-hidden");
+    dom.exerciseList.innerHTML = "";
+  });
+  document.querySelector("#workout-focus").addEventListener("change", (event) => {
+    if (document.querySelector("#workout-discipline").value === "hyrox" && event.target.value === "simulation") {
+      document.querySelector("#workout-duration").value = "90";
+    }
+  });
   document.querySelector("#discard-workout-button").addEventListener("click", () => {
     currentWorkout = null;
     dom.workoutResult.classList.add("is-hidden");
