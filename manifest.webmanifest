@@ -1,7 +1,7 @@
 {
   "name": "Prep Log - Suivi Bodybuilding",
   "short_name": "Prep Log",
-  "description": "Suivi quotidien et concepteur de séances pour une préparation bodybuilding.",
+  "description": "Suivi quotidien et concepteur de séances musculation, HYROX et ATHX.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
