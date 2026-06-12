@@ -1,4 +1,4 @@
-const CACHE_NAME = "prep-log-v3";
+const CACHE_NAME = "prep-log-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
