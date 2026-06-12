@@ -412,8 +412,8 @@
             </button>
             <div>
               <p class="eyebrow">CONCEPTEUR</p>
-              <h1 id="workout-title">Séance aléatoire</h1>
-              <p>Une structure cohérente, à adapter aux consignes de ton coach.</p>
+              <h1 id="workout-title">Concepteur de séance</h1>
+              <p>Musculation, HYROX ou ATHX, avec une structure prête à suivre.</p>
             </div>
           </div>
 
@@ -422,12 +422,20 @@
               <span class="step-number">01</span>
               <div>
                 <h2 id="workout-settings-title">Choisis le cadre</h2>
-                <p>Le tirage respecte la zone travaillée, le matériel et le temps disponible.</p>
+                <p>Les réglages s’adaptent automatiquement à la discipline choisie.</p>
               </div>
             </div>
             <div class="field-grid two-cols workout-controls">
+              <label class="field workout-discipline-field">
+                <span>Discipline</span>
+                <select id="workout-discipline">
+                  <option value="strength">Musculation</option>
+                  <option value="hyrox">HYROX</option>
+                  <option value="athx">ATHX</option>
+                </select>
+              </label>
               <label class="field">
-                <span>Zone</span>
+                <span id="workout-focus-label">Zone</span>
                 <select id="workout-focus">
                   <option value="push">Push</option>
                   <option value="pull">Pull</option>
@@ -447,7 +455,7 @@
                 </select>
               </label>
               <label class="field">
-                <span>Matériel</span>
+                <span id="workout-equipment-label">Matériel</span>
                 <select id="workout-equipment">
                   <option value="gym">Salle complète</option>
                   <option value="dumbbells">Haltères + banc</option>
@@ -463,6 +471,9 @@
                 </select>
               </label>
             </div>
+            <p class="workout-discipline-help" id="workout-discipline-help">
+              Un tirage équilibré selon la zone, le matériel et le temps disponible.
+            </p>
             <button class="primary-button workout-generate-button" id="generate-workout-button" type="button">
               <svg viewBox="0 0 24 24"><path d="M20 7h-4V3M4 17h4v4M5.5 8.5A7 7 0 0 1 16 5l4 2M18.5 15.5A7 7 0 0 1 8 19l-4-2"></path></svg>
               Générer ma séance
@@ -493,7 +504,7 @@
               </button>
             </div>
             <p class="workout-disclaimer">
-              Ne remplace pas le programme de ton préparateur. Arrête un exercice en cas de douleur inhabituelle.
+              Adapte les charges avec ton coach. Arrête la séance en cas de douleur inhabituelle.
             </p>
           </section>
         </section>
